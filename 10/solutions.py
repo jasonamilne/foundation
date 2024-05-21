@@ -346,7 +346,10 @@ class Solution:
 
 
         # if all characters are the same
-        if len(set(s)) == 1:
+        if len(set(s)) <= 1:
+            return s
+        
+        if len(s) <= 2:
             return s
     
         pal = {}
