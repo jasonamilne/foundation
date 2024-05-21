@@ -1,4 +1,4 @@
-from solution import Solution, ListNode
+from solutions import Solution, ListNode
 import pytest
 
 @pytest.fixture

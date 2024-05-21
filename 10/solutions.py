@@ -3,19 +3,21 @@ import pytest
 
 class SearchAlgorithms:
     @staticmethod
-    def binary_search_partition(nums1: List[int], nums2: List[int], m: int, n: int) -> Tuple[int, int]:
+    def binary_search_partition(nums1: List[int], nums2: List[int]) -> Tuple[int, int]:
         """
         Helper function to find the correct partition in the combined sorted arrays.
 
         Args:
             nums1 (List[int]): First sorted array.
             nums2 (List[int]): Second sorted array.
-            m (int): Length of the first array.
-            n (int): Length of the second array.
+
 
         Returns:
             Tuple[int, int]: The maximum of the left partition and the minimum of the right partition.
         """
+        # Lengths of the two arrays
+        m, n = len(nums1), len(nums2) # O(1)
+
         imin, imax, half_len = 0, m, (m + n + 1) // 2 # O(1)
 
         while imin <= imax:
@@ -281,14 +283,17 @@ class Solution:
         # Overall time complexity: O(log(min(m,n)))
         # Overall space complexity: O(1)
 
-        if not nums1:
-            return (max(nums2)+min(nums2))/2
+        # if nums1 is empty
+        if not nums1: # O(1)
+            return (max(nums2)+min(nums2))/2 # O(1)
         
-        if not nums2:
-            return (max(nums1)+min(nums1))/2
+        # if nums2 is empty
+        if not nums2: # O(1)
+            return (max(nums1)+min(nums1))/2 # O(1)
 
-        if not nums1 and not nums2:
-            return None
+        # if nums1 and nums2 are empty
+        if not nums1 and not nums2:  # O(1)
+            return None  # O(1)
 
         # Ensure nums1 is the smaller array to minimize the binary search range
         if len(nums1) > len(nums2): # O(1)
@@ -298,7 +303,7 @@ class Solution:
         m, n = len(nums1), len(nums2) # O(1)
 
         # Use the SearchAlgorithms class to find the correct partition
-        max_of_left, min_of_right = SearchAlgorithms.binary_search_partition(nums1, nums2, m, n) # O(log(min(m,n)))    
+        max_of_left, min_of_right = SearchAlgorithms.binary_search_partition(nums1, nums2) # O(log(min(m,n)))    
 
         # If the total length is odd, return max_of_left
         if (m + n) % 2 == 1: # O(1)
@@ -306,3 +311,47 @@ class Solution:
 
         # If the total length is even, return the average of max_of_left and min_of_right
         return (max_of_left + min_of_right) / 2.0 # O(1)
+
+    def longestPalindrome(self, s: str) -> str:
+        """
+        Given a string `s`, return the longest palindromic substring in `s`.
+
+        Args:
+            s: input string of characters.
+
+        Returns:
+            str: longest palindromic substring in `s`.
+        
+        Example:
+            >>> s = "babad"
+            >>> solutions.longestPalindrome("babad")
+            "bab"
+               
+        Constraints:
+            * 1 <= s.length <= 1000
+            * `s` consists of only digits and English letters.
+        """
+
+        # function to generate powerset of s
+        def all_substrings_generator(s):
+            length = len(s)
+            for i in range(length):
+                for j in range(i + 1, length + 1):
+                    yield s[i:j]
+
+
+        # if all characters are the same
+        if len(set(s)) == 1:
+            return s
+    
+        # palindrome check
+        for substring in all_substrings_generator(s):
+            if substring == substring[::-1] and len(substring) > 1: # check to see if substring equals reverse substring
+                pal = {substring: len(substring)}
+
+        # if no palindromes exist
+        if not pal: 
+            return None
+        else:
+            return max(pal, key=pal.get) # return maximum length palindrome
+        

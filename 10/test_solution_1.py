@@ -1,4 +1,4 @@
-from solution import Solution
+from solutions import Solution
 import pytest
 
 @pytest.fixture
