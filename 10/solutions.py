@@ -332,11 +332,16 @@ class Solution:
             * `s` consists of only digits and English letters.
         """
 
+        # Algorithm type: Brute-Force
+        # Overall time complexity:  O(n^3)
+        # Overall space complexity: O(1)
+
         # function to generate powerset of s
+        # O(n^2)
         def all_substrings_generator(s):
             length = len(s)
-            for i in range(length):
-                for j in range(i + 1, length + 1):
+            for i in range(length): # O(n)
+                for j in range(i + 1, length + 1): # O(n)
                     yield s[i:j]
 
 
@@ -344,14 +349,17 @@ class Solution:
         if len(set(s)) == 1:
             return s
     
+        pal = {}
         # palindrome check
-        for substring in all_substrings_generator(s):
-            if substring == substring[::-1] and len(substring) > 1: # check to see if substring equals reverse substring
-                pal = {substring: len(substring)}
+        for substring in all_substrings_generator(s): # O(n)
+            # check to see if substring equals reverse substring
+            if substring == substring[::-1]: 
+                pal[substring]= len(substring)
 
         # if no palindromes exist
         if not pal: 
             return None
         else:
-            return max(pal, key=pal.get) # return maximum length palindrome
+            # return maximum length palindrome
+            return max(pal, key=pal.get) 
         
