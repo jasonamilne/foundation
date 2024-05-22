@@ -366,3 +366,95 @@ class Solution:
             # return maximum length palindrome
             return max(pal, key=pal.get) 
         
+
+    def convert(self, s: str, numRows: int) -> str:
+        """
+        Given a string `s` and a number of rows `numRows`
+        return the string with this amount of rows in a zigzag pattern.
+
+        Args:
+            s: input string of characters.
+            numRows: number of rows for the zigzag pattern
+
+        Returns:
+            str: string by row when reorganized into zigzag pattern
+        
+        Example:
+            >>> s = "PAYPALISHIRING"
+            >>> solutions.convert(s)
+            "PAHNAPLSIIGYIR"
+
+        Explanation:
+            P   A   H   N
+            A P L S I I G
+            Y   I   R
+               
+        Constraints:
+            * 1 <= s.length <= 1000
+            * s consists of English letters (lower-case and upper-case), ',' and '.'.
+            * 1 <= numRows <= 1000      
+        """     
+        # Edge case: if numRows is 1 or greater than or equal to the length of s
+        if numRows == 1 or numRows >= len(s):
+            return s
+        
+        # Create an array of empty lists for each row (space complexity O(numRows))
+        rows = [[] for _ in range(numRows)]
+        current_row = 0
+        going_down = False
+        
+        # Iterate over each character in the string (time complexity O(n))
+        for char in s:
+            rows[current_row].append(char)  # Append character to the current row (O(1))
+            
+            # Determine if we need to change direction
+            if current_row == 0 or current_row == numRows - 1:
+                going_down = not going_down
+            
+            # Move to the next row
+            current_row += 1 if going_down else -1
+        
+        # Flatten the list of lists into a single string (time complexity O(n))
+        return ''.join(''.join(row) for row in rows)  
+
+    def reverse(self, x: int) -> int:
+        """
+        Given a signed 32-bit integer x, 
+        return x with its digits reversed. 
+        
+        If reversing x causes the value to go outside the signed 
+        32-bit integer range [-231, 231 - 1], then return 0.
+
+        Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+
+        Args:
+            x: 32-bit integer
+
+        Returns:
+            int: reversed 32-bit integer or 0 if out of range
+        
+        Example:
+            >>> x = 123
+            >>> solutions.reverse(x)
+            321
+               
+        Constraints:
+            * -2**31 <= x <= 2**31 - 1   
+        """
+        INT_MIN, INT_MAX = -2**31, 2**31 - 1  # Define the 32-bit integer limits
+        r = 0  # Initialize the result variable
+        
+        while x != 0:
+            # Extract the last digit of x
+            pop = x % 10 if x > 0 else x % -10
+            # Update x by removing the last digit
+            x = x // 10 if x > 0 else (x - pop) // 10
+
+            # Update r with the new digit
+            r = r * 10 + pop
+            
+            # Check for overflow/underflow before updating r
+            if r >= INT_MAX or r <= INT_MIN :
+                return 0
+        
+        return r  # Return the result if within the 32-bit range
