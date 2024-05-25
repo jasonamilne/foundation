@@ -458,3 +458,67 @@ class Solution:
                 return 0
         
         return r  # Return the result if within the 32-bit range
+
+    def myAtoi(self, s: str) -> int:
+        # Step 1: Initialize variables
+        length, i, sign, res = len(s), 0, +1, ''
+        
+        # Step 2: Ignore any leading whitespace (" ").
+        while i < length and s[i] == ' ':
+            i = i + 1
+        
+        # Step 3: Determine the sign by checking if the next character is '-' or '+', assuming positivity is neither present.
+        if i < length and s[i] in ('-', '+'):
+            sign = -1 if s[i] == '-' else +1
+            i = i + 1
+            
+        # Step 4: Convert characters to integer
+        while i < length and s[i].isdigit():
+            res = res + s[i]
+            i = i + 1
+        
+        # Step 5: Handle conversion and integer overflow
+        return max(-2**31, min(sign * int(res or 0), 2**31 - 1))
+
+    def isPalindrome(self, x: int) -> bool:
+        # Negative numbers and numbers ending in zero (except 0 itself) are not palindromes
+        if x < 0 or (x % 10 == 0 and x != 0):
+            return False
+        
+        reversed_half = 0
+        while x > reversed_half:
+            reversed_half = reversed_half * 10 + x % 10
+            x //= 10
+        
+        # If the number is a palindrome, the reversed half should be equal to the remaining number
+        # or it should be equal after removing the middle digit (for odd digit count numbers)
+        return x == reversed_half or x == reversed_half // 10
+
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+        
+        # Create a DP table with dimensions (m+1) x (n+1)
+        dp = [[False] * (n + 1) for _ in range(m + 1)]
+        
+        # Base case: empty string and empty pattern match
+        dp[0][0] = True
+        
+        # Handle patterns that can match empty string, e.g., a*, a*b*, etc.
+        for j in range(2, n + 1):
+            if p[j - 1] == '*':
+                dp[0][j] = dp[0][j - 2]
+        
+        # Fill the DP table
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if p[j - 1] == '*':
+                    # Star can match zero or more of the preceding element
+                    dp[i][j] = dp[i][j - 2] or (dp[i - 1][j] and (p[j - 2] == s[i - 1] or p[j - 2] == '.'))
+                else:
+                    # Exact match or match due to '.'
+                    dp[i][j] = dp[i - 1][j - 1] and (p[j - 1] == s[i - 1] or p[j - 1] == '.')
+        
+        # Result is whether the entire string s matches the entire pattern p
+        return dp[m][n]
+
+    
