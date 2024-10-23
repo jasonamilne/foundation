@@ -14,8 +14,8 @@ class Solution():
         7. Append the digit to the result list.
         8. Move to the next nodes.
 
-        Time complexity: O(max(m, n))
-        Space complexity: O(max(m, n))
+        Time complexity: O(max(m, n)) # m and n are the lengths of the two linked lists
+        Space complexity: O(max(m, n)) # the length of the result linked list is at most max(m, n) + 1
         Algorithm: Iterative
         """
         dummy_head = ListNode(0)
